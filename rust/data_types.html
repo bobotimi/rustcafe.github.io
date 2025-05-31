@@ -194,7 +194,7 @@
 <ul>
 <li>Array</li>
 <li>Tuple
-See <a href="chapter_4.html">Arrays and tuples</a> for more information</li>
+See <a href="compound_types">Arrays and tuples</a> for more information</li>
 </ul>
 <h2 id="variable-declaration"><a class="header" href="#variable-declaration">Variable declaration</a></h2>
 <p>You declare a variable in Rust using the <code>let</code> keyword. For example:</p>
@@ -309,6 +309,22 @@ println!("The number is {}", number);
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 

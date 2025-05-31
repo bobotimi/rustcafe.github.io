@@ -199,7 +199,7 @@ I have recently become interested in Rust. The purpose of this site is to showca
 <ul>
 <li>Array</li>
 <li>Tuple
-See <a href="chapter_4.html">Arrays and tuples</a> for more information</li>
+See <a href="compound_types">Arrays and tuples</a> for more information</li>
 </ul>
 <h2 id="variable-declaration"><a class="header" href="#variable-declaration">Variable declaration</a></h2>
 <p>You declare a variable in Rust using the <code>let</code> keyword. For example:</p>
@@ -318,7 +318,7 @@ Examples of Rust built-in types that implement the Drop trait are String, Vec, F
    let fruit = String::from("apple");
    println!("fruit is {}", fruit);
    
-   //fruit is moved into fruit
+   //fruit is moved into fruit2
    let fruit2 = fruit;
    println!("fruit2 is {}", fruit2);
    
@@ -384,8 +384,9 @@ the <strong>owner</strong> of the <code>String</code>.</p>
   
   print_name(another_name);
  
-  //Can no longer use another_name because the owner was changed to the function parameter
-  //when it was passed as an argument above
+  //Can no longer use another_name because the ownership was moved into the 
+  //function's paramater when it was passed as an argument above.
+  // Thus the owner is now the function parameter `name`
   //println!("name is {}", another_name);
 }
 
@@ -400,6 +401,179 @@ of the String <code>Olu Shiyanbade</code> while variable <code>name</code> goes 
 <li>similarly, when we do <code>print_name(another_name</code>, <code>another_name</code> is moved into the
 <code>print_name</code> function and that function's <code>name</code> parameter becomes the new owner. At this point <code>another_name</code> goes
 out of scope and can no longer be used beyond that point.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="borrowingreferences"><a class="header" href="#borrowingreferences">Borrowing/References</a></h1>
+<p>Borrowing in Rust means obtaining a reference to some variable.
+From now on, we'll use phrases "obtaining a reference" and "borrowing" interchangeably.
+When you obtain a reference to a variable <code>foo</code> and assign it to another variable <code>bar</code>,
+the variable <code>bar</code> is the borrower and the variable <code>foo</code> is the owner/lender. Thus, <code>bar</code> refers
+to <code>foo</code> or we can say <code>bar</code> borrows <code>foo</code>'s value.
+Variable <code>bar</code> can freely read the data owned by <code>foo</code> but it cannot modify the data unless otherwise specified via the <code>mut</code> keyword.
+(more on this below)</p>
+<p>Usually in Rust, when you want to assign a heap allocated variable to another variable
+or pass it to a function, what you want is to <em>borrow</em> the data that variable refers to (or succinctly borrow the variable) rather than taking ownership of it as we
+saw in the previous section. In order to <em>borrow</em> a variable, you obtain a reference to that variable.</p>
+<p>Let's use the <code>String</code> type as an example:</p>
+<pre><pre class="playground"><code class="language-rust editable">
+fn main() {
+  let fruit = String::from("apple");
+
+  println!("Fruit is {}", fruit);
+
+  let fruit2 = &amp;fruit; //borrow occurs here i.e. fruit2 is a reference to fruit
+
+  println!("Fruit2 is {}", fruit2);
+  
+  //Can still use fruit variable here
+  println!("Fruit is {}", fruit);
+} </code></pre></pre>
+<p>Similarly, for method calls, you can pass a reference as argument (i.e. borrowed the variable)
+to the function call like so:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+  let name = String::from("Olu");
+
+  println!("Name is {}", name);
+
+  say_hello(&amp;name); //borrow occurs here
+  
+  //Can still use name variable here
+  println!("Name is {}", name);
+} 
+
+fn say_hello(name: &amp;String) { //name is a reference to a String passed into the function
+   println!("Hello {}", name)
+}</code></pre></pre>
+<h2 id="what-actually-happens-when-you-assign"><a class="header" href="#what-actually-happens-when-you-assign">What actually happens when you assign</a></h2>
+<h2 id="a-reference-ie-a-borrowed-variable-is-immutable-by-default"><a class="header" href="#a-reference-ie-a-borrowed-variable-is-immutable-by-default">A reference (i.e. a borrowed variable) is immutable by default</a></h2>
+<p>By default, when you borrow a variable, the reference is immutable. That is, by default, you cannot<br />
+use the reference to change the variable. Example, the below snippet fails:</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+  let fruit = String::from("apple");
+
+  println!("Fruit is {}", fruit);
+
+  let fruit2 = &amp;fruit; //borrow occurs here i.e. fruit2 is an immutable reference to fruit
+  
+  println!("Fruit2 is {}", fruit2);
+  
+  let another_fruit = String::from("pear");
+  
+  fruit2 = &amp;another_fruit; //compiler error here
+  
+  println!("Fruit2 is now {}", fruit2);
+} </code></pre></pre>
+<p>You'll see from the error message shown that <code>fruit2</code> is immutable by default, just like any other
+rust variable (i.e. when you do a <code>let foo = ...</code>, the variable, reference or not, is always immutable by default).
+Adding the <code>mut</code> keyword to <code>fruit2</code> declaration sorts it:</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+  let fruit = String::from("apple");
+
+  println!("Fruit is {}", fruit);
+
+  let mut fruit2 = &amp;fruit; //borrow occurs here i.e. fruit2 is a mutable reference to fruit
+  
+  println!("Fruit2 is {}", fruit2);
+  
+  let another_fruit = String::from("pear");
+  
+  fruit2 = &amp;another_fruit; //Now you can assign a new reference to fruit2
+  
+  println!("Fruit is still {}", fruit); // still refers to the the "apple" String
+  println!("Fruit2 is now {}", fruit2); //now refers to the "pear" String
+} </code></pre></pre>
+<p>In the above, example, we initially assigned a reference to a <code>String</code> containing "apple"
+to <code>fruit2</code> and then we assigned another reference to a different <code>String</code> containing "pear"
+to <code>fruit</code>. Thus we made <code>fruit2</code> refer to two different Strings (one at a time) over the course of the program.
+What if we wanted to use <code>fruit2</code> to modify the original String i.e. the <code>String::from("apple")</code>?</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+  let mut fruit = String::from("apple");
+
+  println!("Fruit is {}", fruit);
+
+  let fruit2 = &amp; mut fruit; //borrow occurs here i.e. fruit2 is a mutable reference to fruit
+  
+  println!("Fruit2 is {}", fruit2);
+  
+  fruit2.push_str(" and pears");
+  
+  //Both fruit and fruit2 refer to the same `String`
+  println!("Fruit2 is now {}", fruit2);
+  println!("Fruit is now {}", fruit); 
+} </code></pre></pre>
+<h2 id="temporary-references"><a class="header" href="#temporary-references">Temporary references</a></h2>
+<p>As we have seen, in order for you to borrow a variable's value (i.e. obtain a reference), you do something like:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let my_apple = String::from("apple");
+let your_apple = &amp;my_apple;
+<span class="boring">}</span></code></pre></pre>
+<p>where <code>my_apple</code> is the variable you are borrowing from abd <code>your_apple</code> is the borrowed value (i.e., reference to my_apple's value).
+Thus, in order for us to borrow a variable's value, we do so via the name of the variable (in this case <code>my_apple</code>) whose value we want to borrow.</p>
+<p>However, it is possible to create a borrow a value using a what I call a shorthand approach,
+i.e., without using an intermediate variable as shown below:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let your_apple = &amp;String::from("apple");
+<span class="boring">}</span></code></pre></pre>
+<p>What actually happens for the above is that Rust will create a temporary variable for us behind the scenes and it is through
+that temporary variable that the reference assigned to <code>your_apple</code> is created. That is, the snippet would essentially be expanded
+to what we did in the first one:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let temp_variable_created_by_rust = String::from("apple");
+let your_apple = &amp;temp_variable_created_by_rust;
+<span class="boring">}</span></code></pre></pre>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<p><strong>References rules</strong></p>
+<ul>
+<li>At any given time, you can have either one mutable reference or many immutable references.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+  let mut fruit = String::from("apple");
+
+  println!("Fruit is {}", fruit);
+
+  let fruit2 = &amp; mut fruit; //borrow occurs here i.e. fruit2 is a mutable reference to fruit
+  
+  println!("Fruit2 is {}", fruit2);
+  
+  fruit2.push_str(" and pears"); //Do mutation
+  
+  //Both fruit and fruit2 refer to the same `String`
+  //Crucially fruit2 which is a mutable reference to fruit, has exclusivity
+  //i.e., we cannot have another mutable or non-mutable reference to fruit
+  //while fruit2 is still in scope.
+  
+  //When the two lines below are uncommented, you get a compiler error
+  //let fruit3 = &amp;fruit;  
+  //println!("Fruit2 is now {}", fruit2);
+  
+  //You also get a compiler error if say you tried to use println! to
+   //print fruit before fruit2. This is because the print/println macros
+   //implicitly do a borrow of the variable you're trying to print
+
+   //println!("Fruit is now {}", fruit); //println does an implicit borrow of `fruit` so the code will fail here
+   //println!("Fruit2 is now {}", fruit2); //fruit2 which is a mutable borrow and thus has exclusivity to borrowing
+   
+   
+   //correct thing to do here is:
+   println!("Fruit2 is now {}", fruit2); //fruit2 goes out of scope since it's no longer used beyond this point
+   
+   //it is now safe to obtain another reference e.g. explicitly or through an implicit borrow as in the case of println
+   let fruit3 = &amp;fruit;
+   println!("Fruit is now {}", fruit); 
+  
+} </code></pre></pre>
+<ul>
+<li>References must always be valid i.e. a reference must always refer to a variable that is in scope.
+<ul>
+<li>A common example of Rust enforcing this rule
+is the prevention of references from being returned from a function if that reference refers to a variable created in that function. This is because
+that variable is part of that function's call stack and that call stack is destroyed when the function ends. Thus, if Rust allows the function to return a reference to such a variable from the function, that
+reference would be a dangling reference  (i.e. it would be pointing to something that has been dropped) and this is a logic error. Thankfully, Rust compiler prevents you from doing this. If you create a variable that references heap allocated data (such as a <code>String</code>) in a function
+and you want to return it from that function, what you'll want to do instead is to move it. That is,</li>
+</ul>
+</li>
 </ul>
 
                     </main>
@@ -419,6 +593,22 @@ out of scope and can no longer be used beyond that point.</li>
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
