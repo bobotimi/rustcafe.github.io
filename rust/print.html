@@ -284,7 +284,7 @@ println!("The number is {}", number);
 let number = 100;
 println!("The number is {}", number);
 <span class="boring">}</span></code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="understanding-ownership-and-borrowing"><a class="header" href="#understanding-ownership-and-borrowing">Understanding Ownership and Borrowing</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="understanding-ownership"><a class="header" href="#understanding-ownership">Understanding Ownership</a></h1>
 <h2 id="stack-and-the-heap"><a class="header" href="#stack-and-the-heap">Stack and the heap</a></h2>
 <ul>
 <li>Data types that we know the size in advance are allocated on the stack.
@@ -348,7 +348,7 @@ fn put_in_basket(theFruit: String, basket: &amp;mut Vec&lt;String&gt;) {
    basket.push(theFruit);
 }</code></pre></pre>
 <p>If you uncomment, the last line in the above snippet and run the snippet, you'll see error messages about moving.</p>
-<h1 id="borrowing-and-ownership"><a class="header" href="#borrowing-and-ownership">Borrowing and Ownership</a></h1>
+<h1 id="ownership-rules"><a class="header" href="#ownership-rules">Ownership rules</a></h1>
 <p>There are three rules related to ownership in Rust namely:</p>
 <ul>
 <li>Every value in Rust has an owner</li>
