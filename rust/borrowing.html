@@ -180,6 +180,8 @@ fn main() {
   //Can still use fruit variable here
   println!("Fruit is {}", fruit);
 } </code></pre></pre>
+<p>The diagram below illustrates what happens when you <em>borrow</em> a variable:</p>
+<p><img src="images/borrowing.jpg" alt="borrowing" /></p>
 <p>Similarly, for method calls, you can pass a reference as argument (i.e. borrowed the variable)
 to the function call like so:</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
@@ -196,7 +198,6 @@ to the function call like so:</p>
 fn say_hello(name: &amp;String) { //name is a reference to a String passed into the function
    println!("Hello {}", name)
 }</code></pre></pre>
-<h2 id="what-actually-happens-when-you-assign"><a class="header" href="#what-actually-happens-when-you-assign">What actually happens when you assign</a></h2>
 <h2 id="a-reference-ie-a-borrowed-variable-is-immutable-by-default"><a class="header" href="#a-reference-ie-a-borrowed-variable-is-immutable-by-default">A reference (i.e. a borrowed variable) is immutable by default</a></h2>
 <p>By default, when you borrow a variable, the reference is immutable. That is, by default, you cannot<br />
 use the reference to change the variable. Example, the below snippet fails:</p>
@@ -337,6 +338,9 @@ and you want to return it from that function, what you'll want to do instead is 
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="moving_borrowing_slicing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -348,26 +352,13 @@ and you want to return it from that function, what you'll want to do instead is 
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="moving_borrowing_slicing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

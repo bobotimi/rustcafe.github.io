@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Arrays and tuples - Olu&#x27;s Rust Cafe</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Olu&#x27;s Rust Cafe</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="arrays-and-tuples"><a class="header" href="#arrays-and-tuples">Arrays and Tuples</a></h1>
+<p>Arrays and tuples are Rust's two primitive compound types.</p>
+<h2 id="tuples"><a class="header" href="#tuples">Tuples:</a></h2>
+<ul>
+<li>Can group different data types together into one compound type</li>
+<li>Have a fixed size; once defined, it cannot grow or shrink.</li>
+</ul>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust editable">    fn main() {
+        let person = (String::from("Olu"), String::from("Shiyanbade"), 42, 1.85, String::from("+447111222333"));
+        println!("{:?}", person );   
+    }</code></pre></pre>
+<p>In the above the tuple's type is implicitly determined by Rust based on the values the tuple holds.
+In this case, it is <code>(String, String, i32, f64, String)</code></p>
+<h3 id="accessing-elements-in-a-tuple"><a class="header" href="#accessing-elements-in-a-tuple">Accessing elements in a tuple</a></h3>
+<ul>
+<li>You can use destructuring to access the individual elements of tuple:</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn main() {
+        let person = (String::from("Johnny"), String::from("Walker"), 42, 1.85, String::from("+447111222333"));
+        let (first_name, last_name, age, height, phone_number) = person;
+        
+        println!("{} {} {} {} {}", first_name, last_name, age, height, phone_number);                
+    }</code></pre></pre>
+<ul>
+<li>You can also use a period followed by the index of the tuple element you want to access e.g. (First index is 0):</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn main() {
+        let person = (String::from("Johnny"), String::from("Walker"), 42, 1.85, String::from("+447111222333"));
+        
+        println!("{} {} {} {} {}", person.0, person.1, person.2, person.3, person.4);                
+    }</code></pre></pre>
+<ul>
+<li>Note that once you de-construct a tuple, you can't use the <code>tuple_name.index</code> if the value at that index is a value that
+lives on the heap i.e., a Droppable value such as <code>String</code> because deconstructing moves the value. See <a href="ownership.html#copying-vs-moving">Moving</a></li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn main() {
+        let person = (String::from("Olu"), String::from("Shiyanbade"), 42, 1.85, String::from("+447111222333"));
+        let (first_name, last_name, age, height, phone_number) = person;
+        
+        //line below will error because String is moved during the deconstruction above
+        //println!("{}", person.0);
+        
+        //this line is fine because i32 and f64 are not Droppable types i.e., the are copied when reassigned to a variable
+        println!("{} {}", person.2, person.3);        
+    }</code></pre></pre>
+<h3 id="modifying-a-tuples-contents"><a class="header" href="#modifying-a-tuples-contents">Modifying a tuple's contents</a></h3>
+<p>You can use the <code>tuple.index</code> syntax to modify a tuple's element. For example,</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut person = ("Johnny", "Walker", 42);
+    println!("{:?}", person);
+    
+    person.2 = 88;
+    person.1 = "James";
+    println!("{:?}", person);    
+}</code></pre></pre>
+<h3 id="passing-tuple-to-a-function-or-reassigning-a-tuple"><a class="header" href="#passing-tuple-to-a-function-or-reassigning-a-tuple">Passing tuple to a function or reassigning a tuple</a></h3>
+<ul>
+<li>When tuple contains only types that implement Copy trait, the tuple is copied. You can see this in the example below that
+when we modify the passed in tuple in <code>change_names</code> function, and then call <code>print_names</code> again in the <code>main</code> function, the original
+tuple's contents is not affected.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust  editable">    fn print_numbers(nums:(i32, i32, i32)) {
+        print!("{:?}", nums);
+    }
+    
+    fn change_numbers(mut nums:(i32, i32, i32)) {
+        nums.0 = 6;
+        nums.1 = 5;
+        print_numbers(nums);
+    }
+    
+    fn print_names(names: (&amp;str, &amp;str, &amp;str)) {
+        print!("{:?}", names);
+    }
+    
+    fn change_names(mut names: (&amp;str, &amp;str, &amp;str)) {
+      names.0 = "James";
+      names.1 = "Peter";
+      names.2 = "John";
+      
+      print_names(names);
+    }
+    
+    fn main() {
+        let count_down = (3, 2, 1); 
+        print_numbers(count_down);
+        println!();
+        change_numbers(count_down);
+        println!();
+        print_numbers(count_down);
+        println!();
+        
+        let names = ("Timi", "Tommy", "Jones");
+        print_names(names);
+        println!();
+        change_names(names);
+        println!();
+        print_names(names);
+        
+    }</code></pre></pre>
+<ul>
+<li>When tuple contains only types that implement Drop trait, when you pass that tuple to a function, the contents of the tuple are moved
+and cannot be used thereafter. In the below, the second call to <code>print_names</code> will cause a compile error.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn print_names(names: (String, String, String)) {
+        print!("{:?}", names);
+    }
+    
+    fn main() {
+        let names = (String::from("Timi"), String::from("Tommy"), String::from("Jones"));
+        print_names(names);
+        println!();
+        
+        //The line below will cause a compile error because the contents of the tuple
+        // was moved on the print_names() call above.
+        print_names(names);        
+    }</code></pre></pre>
+<ul>
+<li>When tuple contains types that implement Copy trait as well as types that implement Drop trait, Rust compiler will still throw an error and rightly so i.e., although
+you have a value that implements Copy trait in there, there's no way for Rust to guarantee that you're not going to used the dropped values
+at runtime. Thus, it makes sense to disallow the whole thing altogether.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn print_person(names: (String, String, i32)) {
+        print!("{:?}", names);
+    }
+    
+    fn main() {
+        let person = (String::from("Timi"), String::from("Tommy"), 42);
+        print_person(person);
+        println!();
+        
+        //The line below will cause a compile error because the contents of the tuple
+        // was moved on the print_names() call above.
+        print_person(person);        
+    }</code></pre></pre>
+<h2 id="arrays"><a class="header" href="#arrays">Arrays:</a></h2>
+<ul>
+<li>An array's data is allocated on the stack (see <a href="https://doc.rust-lang.org/book/ch03-02-data-types.html#the-array-type">arrays</a>)</li>
+<li>All elements in an array must be of the same type</li>
+<li>Arrays have a fixed length</li>
+</ul>
+<h3 id="initializing-an-array"><a class="header" href="#initializing-an-array">Initializing an array</a></h3>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+   let fruits = ["apple", "pear", "orange", "blueberry"];
+}</code></pre></pre>
+<p>An array type is indicated using square brackets, the data type of each array element, a semicolon followed by the number of elements in the array.
+In the above snippet the type of the array is implicitly set by rust to <code>[&amp;str; 4]</code> i.e., an array containing four string slices.
+However, we can also explicitly specify the type like so:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() { 
+    let numbers: [i32; 3] = [1, 2, 3];
+    println!("{:?}", numbers);
+}</code></pre></pre>
+<p>It is also possible to initialise all the elements of the array to the same value as shown below.
+In this case, the data type of the array is determined using the value you specified for initialisation.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let fruits = ["apple"; 10]; //Array's type is determined to be [&amp;str; 10]
+    println!("{:?}", fruits);
+    
+    let numbers = [5; 10]; // Array's type is determined to be [i32; 10]
+    println!("{:?}", numbers);    
+}</code></pre></pre>
+<h3 id="passing-array-to-a-function-or-reassigning-an-array"><a class="header" href="#passing-array-to-a-function-or-reassigning-an-array">Passing array to a function or reassigning an array</a></h3>
+<ul>
+<li>When array contains only types that implement Copy trait: when you pass an array containing only types such as integers, floats, booleans, char and your own custom types, that implement the Copy trait to a function, that array is copied.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust  editable">    fn print_numbers(arr:[i32;5]) {
+        for num in arr {
+            print!("{num} ")
+        }
+    }
+    
+    fn change_numbers(mut arr:[i32;5]) {
+        arr[0] = 6;
+        arr[1] = 5;
+        print_numbers(arr);
+    }
+    
+    fn print_names(names: [&amp;str;3]) {
+      for name in names {
+        print!("{name} ");
+      }
+    }
+    
+        
+    fn change_names(mut names:[&amp;str;3]) {
+      names[0] = "James";
+      names[1] = "Peter";
+      names[2] = "John";
+      
+      print_names(names);
+    }
+    
+    fn main() {
+        let count_down = [5, 4, 3, 2, 1]; 
+        print_numbers(count_down);
+        println!();
+        change_numbers(count_down);
+        println!();
+        print_numbers(count_down);
+        println!();
+        
+        let names = ["Timi", "Tommy", "Jones"];
+        print_names(names);
+        println!();
+        change_names(names);
+        println!();
+        print_names(names);
+        
+    }</code></pre></pre>
+<p>In the above, you can see that the <code>count_down</code> array is still the same after the call to <code>mutate_and_print_array</code>  function.</p>
+<ul>
+<li>When array contains only types that implement Drop trait: when you pass an array containing only types that implement the Drop trait such as String or your own custom types, to a function, that array's contents are moved by default.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust  editable">    fn print_names(names: [String;3]) {
+      for name in names {
+        print!("{name} ");
+      }
+    }
+    
+    fn main() {
+     let names = [String::from("Timi"), String::from("Tommy"), String::from("Jones")];
+        print_names(names); //move occurs here
+        println!();
+        
+        //The snippet below will cause a compile error.
+        print_names(names);
+    }</code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="functions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="slices.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="functions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="slices.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

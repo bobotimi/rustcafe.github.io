@@ -157,9 +157,23 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="about-me"><a class="header" href="#about-me">About me</a></h1>
-<p>My name is Olu Shiyanbade ([linkedin](https://www.linkedin.com/in/olu-shiyanbade-8ba78335/] profile)). I'm a Software Engineer with 16 years development experience. I have experience with Java and common associated technologies/frameworks such as Spring and SpringBoot.
+<p>My name is Olu Shiyanbade <a href="https://www.linkedin.com/in/olu-shiyanbade-8ba78335/">linkedin</a>. I'm a Software Engineer with 16 years development experience. I have experience with Java and common associated technologies/frameworks such as Spring and SpringBoot.
 I also have experience with databases, Kubernetes, AWS and Azure.
 I have recently become interested in Rust. The purpose of this site is to showcase what I learn on my Rust journey. Enjoy!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="standard-input-and-output"><a class="header" href="#standard-input-and-output">Standard Input and Output</a></h1>
+<h2 id="writing-to-standard-output"><a class="header" href="#writing-to-standard-output">Writing to standard output</a></h2>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    println!("Hello World!!!");
+}</code></pre></pre>
+<h2 id="reading-from-standard-input"><a class="header" href="#reading-from-standard-input">Reading from standard input</a></h2>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+    let mut line =  String::new();
+    std::io::stdin().read_line(&amp; mut line).expect("cannot read");
+
+    let line = line.trim();
+
+    println!("You entered {line}");
+}</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="data-types-and-variables"><a class="header" href="#data-types-and-variables">Data types and Variables</a></h1>
 <h2 id="data-types"><a class="header" href="#data-types">Data types</a></h2>
 <p>The primitive (i.e. built in) data types in Rust can be sub divided into two namely:</p>
@@ -199,7 +213,7 @@ I have recently become interested in Rust. The purpose of this site is to showca
 <ul>
 <li>Array</li>
 <li>Tuple
-See <a href="compound_types">Arrays and tuples</a> for more information</li>
+See <a href="arrays_and_tuples">Arrays and tuples</a> for more information</li>
 </ul>
 <h2 id="variable-declaration"><a class="header" href="#variable-declaration">Variable declaration</a></h2>
 <p>You declare a variable in Rust using the <code>let</code> keyword. For example:</p>
@@ -284,6 +298,553 @@ println!("The number is {}", number);
 let number = 100;
 println!("The number is {}", number);
 <span class="boring">}</span></code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="control-structures"><a class="header" href="#control-structures">Control structures</a></h1>
+<h2 id="the-if-expression"><a class="header" href="#the-if-expression">The if expression</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>   let number = 3;
+   if number &gt;= 3 {
+       println!("It's a three");
+   }
+<span class="boring">}</span></code></pre></pre>
+<h2 id="ifelse"><a class="header" href="#ifelse">if...else</a></h2>
+<pre><pre class="playground"><code class="language-rust editable"> fn main() {
+
+   let number = 3;
+   if number % 2 == 0 {
+       println!("It's even");
+   } else {
+       println!("It is odd");
+   }
+ }</code></pre></pre>
+<h2 id="ifelse-if"><a class="header" href="#ifelse-if">if..else if...</a></h2>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+ let number = 18;
+ 
+ if number % 3 == 0 &amp;&amp; number % 5 == 0 {
+    println!("Fizz buzz");
+ } else if (number % 3 == 0)  {
+    println!("Fizz");
+ } else if (number % 5 == 0)  {
+    println!("Buzz");
+ } else {
+   println!("{number}");
+ }
+}</code></pre></pre>
+<p>In Rust, the if conditional construct is an expression. This means you can use it on the right side
+of an assignment operator to assign a value (i.e. the outcome of the if expression) to a variable.</p>
+<p>Notice the absence of a semicolon after the "Even" and "Odd".  You musn't include a semicolon
+in order for the if..else to remain an expression - inserting a semicolon will turn the if..else into a statement
+whose return value is <code>()</code></p>
+<p>See <a href="https://doc.rust-lang.org/book/ch03-03-how-functions-work.html#statements-and-expressions">Statements and expressions</a> for more info.</p>
+<p>For example,</p>
+<pre><pre class="playground"><code class="language-rust editable">  fn main() {
+ 
+    let number = 3;
+    let odd_or_even = if number % 2 == 0 { "Even" } else { "Odd" };
+    
+    println!("{} is {}", number, odd_or_even);
+  }</code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="loop"><a class="header" href="#loop">Loop</a></h1>
+<p>Used to repeat a block of code over and over again.
+For example, the below will print "Hello world" again and again, forever.</p>
+<pre><code>   loop {
+      println!("Hello world");
+   }
+</code></pre>
+<h2 id="breaking-out-of-a-loop"><a class="header" href="#breaking-out-of-a-loop">Breaking out of a loop</a></h2>
+<p>You can terminate a loop with the <code>break</code> keyword.</p>
+<pre><pre class="playground"><code class="language-rust">  fn main() {
+    let mut retries = 0;
+    loop {
+      if retries == 3 {
+        break;
+      }
+     
+      retries += 1;
+      println!("{} retry attempts", retries);
+    }
+    println!("Done");
+  }</code></pre></pre>
+<p>You can use break to return a value from a loop as follows:</p>
+<pre><pre class="playground"><code class="language-rust">  fn main() {
+    let mut retries = 0;
+    let result  = loop {
+      if retries == 3 {
+        break retries;
+      }
+     
+      retries += 1;
+      println!("{} retry attempts", retries);
+    };
+    
+    println!("Done. Result is {result}");
+  }</code></pre></pre>
+<h2 id="continuing-a-loop"><a class="header" href="#continuing-a-loop">Continuing a loop</a></h2>
+<p>You can use the <code>continue</code> keyword to continue with the next iteration of a loop i.e. skipping everything below the continue keyword
+in the block. In the example below, we skip the remaining part of the loop if the value of <code>counter</code>
+is not a multiple of 3 or 5. We break out of the loop when <code>counter</code> is greater than 30.</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+
+   let mut counter = 1;
+   loop {
+   
+     counter += 1;
+     if counter % 3 != 0 || counter % 5 != 0 {
+        continue;
+     }
+     println!("{counter} is a multiple of 3 and 5");
+     
+     if counter &gt; 30 {
+        break;
+     }
+   }
+}</code></pre></pre>
+<h2 id="nested-loops"><a class="header" href="#nested-loops">Nested loops</a></h2>
+<p>If you have loops within loops, note that break and continue, apply to the innermost loop.
+However, you can use loop labels to indicate which loop you would like a break or continue to apply to.
+The example below demonstrates usage of <code>break</code> with loop labels.</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+
+   let mut counter = 0;
+
+   'outer: loop {
+      loop {
+        counter += 1;
+        if counter % 3 == 0 &amp;&amp; counter % 5 == 0 {
+           break 'outer;
+        }
+        println!("{counter} is not a multiple of 3 and 5");
+      }
+   }
+   println!("{counter} is a multiple of 3 and 5");
+}</code></pre></pre>
+<h2 id="while-loops"><a class="header" href="#while-loops">While loops</a></h2>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+    
+  let mut counter = 10;  
+  while counter &gt; 0 {
+     println!("{counter}");
+     counter -= 1;
+  }
+  
+  println!("Lift off");
+}</code></pre></pre>
+<h2 id="for-loops"><a class="header" href="#for-loops">For loops</a></h2>
+<p>Typically, you'd use for iterating a collection. For example,</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+   for number in 1..= 10 {
+     println!("{number}");
+   }   
+   println!("Done");
+}</code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
+<p>You declare a function as follows:</p>
+<pre><pre class="playground"><code class="language-rust editable">fn say_hello() {
+    println!("Hello");
+}
+
+fn main() {
+    say_hello();
+}</code></pre></pre>
+<h2 id="functions-with-parameters"><a class="header" href="#functions-with-parameters">Functions with parameters</a></h2>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+    print_sum(5, 7);
+}
+
+fn print_sum(number1: i32, number2: i32) {
+    println!("Sum of {} and {} is {}", number1, number2, number1 + number2);
+}</code></pre></pre>
+<h2 id="statements-vs-expressions"><a class="header" href="#statements-vs-expressions">Statements vs Expressions</a></h2>
+<p>In Rust,</p>
+<ul>
+<li>Statements don't return a value</li>
+<li>Expressions always evaluate to a value</li>
+</ul>
+<h2 id="returning-a-value-from-a-function"><a class="header" href="#returning-a-value-from-a-function">Returning a value from a function</a></h2>
+<p>When returning a value from a function, you would typically do so using the last expression in the function.
+In this case, you must not end it with a semicolon. Example:</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+    let num1 = 5;
+    let num2 = 7;
+    
+    let sum  = sum(5, 7);
+    println!("Sum of {} and {} is {}", num1, num2, sum);
+}
+
+fn sum(number1: i32, number2: i32) -&gt; i32 {
+    number1 + number2
+}</code></pre></pre>
+<p>If you were to end the last line above with a semicolon (as shown below), that line becomes a statement, and you'll get an error.</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+    let num1 = 5;
+    let num2 = 7;
+    
+    let sum  = sum(5, 7);
+    println!("Sum of {} and {} is {}", num1, num2, sum);
+}
+
+fn sum(number1: i32, number2: i32) -&gt; i32 {
+    number1 + number2;
+}</code></pre></pre>
+<p>In the above, you get an error about the unit type: <code>()</code>. This means that you're trying to use a statement where an expression is expected.
+Statements don't return a value , which is expressed by the <code>()</code>, the unit type.</p>
+<p>Lastly, you can return from a function early using <code>return</code> keyword and specifying a value. That is, before the function's  last line, for example, from the body of an if block within the function.</p>
+<pre><pre class="playground"><code class="language-rust editable">fn main() {
+    let number1 = 3;
+    let number2 = 5;
+    let number3 = 15;
+    let number4 = 16;
+    
+    println!("{}", fizz_buzz(number1));
+    println!("{}", fizz_buzz(number2));
+    println!("{}", fizz_buzz(number3));
+    println!("{}", fizz_buzz(number4));
+   
+}
+
+fn fizz_buzz(number: i32) -&gt; String {
+    if number % 15 == 0 {
+        return String::from("Fizz Buzz");
+    } else if number % 5 == 0 {
+        return String::from("Buzz");
+    } else if number % 3 ==0 {
+        return String::from("Fizz");
+    }
+    number.to_string()
+}</code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="arrays-and-tuples"><a class="header" href="#arrays-and-tuples">Arrays and Tuples</a></h1>
+<p>Arrays and tuples are Rust's two primitive compound types.</p>
+<h2 id="tuples"><a class="header" href="#tuples">Tuples:</a></h2>
+<ul>
+<li>Can group different data types together into one compound type</li>
+<li>Have a fixed size; once defined, it cannot grow or shrink.</li>
+</ul>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust editable">    fn main() {
+        let person = (String::from("Olu"), String::from("Shiyanbade"), 42, 1.85, String::from("+447111222333"));
+        println!("{:?}", person );   
+    }</code></pre></pre>
+<p>In the above the tuple's type is implicitly determined by Rust based on the values the tuple holds.
+In this case, it is <code>(String, String, i32, f64, String)</code></p>
+<h3 id="accessing-elements-in-a-tuple"><a class="header" href="#accessing-elements-in-a-tuple">Accessing elements in a tuple</a></h3>
+<ul>
+<li>You can use destructuring to access the individual elements of tuple:</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn main() {
+        let person = (String::from("Johnny"), String::from("Walker"), 42, 1.85, String::from("+447111222333"));
+        let (first_name, last_name, age, height, phone_number) = person;
+        
+        println!("{} {} {} {} {}", first_name, last_name, age, height, phone_number);                
+    }</code></pre></pre>
+<ul>
+<li>You can also use a period followed by the index of the tuple element you want to access e.g. (First index is 0):</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn main() {
+        let person = (String::from("Johnny"), String::from("Walker"), 42, 1.85, String::from("+447111222333"));
+        
+        println!("{} {} {} {} {}", person.0, person.1, person.2, person.3, person.4);                
+    }</code></pre></pre>
+<ul>
+<li>Note that once you de-construct a tuple, you can't use the <code>tuple_name.index</code> if the value at that index is a value that
+lives on the heap i.e., a Droppable value such as <code>String</code> because deconstructing moves the value. See <a href="ownership.html#copying-vs-moving">Moving</a></li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn main() {
+        let person = (String::from("Olu"), String::from("Shiyanbade"), 42, 1.85, String::from("+447111222333"));
+        let (first_name, last_name, age, height, phone_number) = person;
+        
+        //line below will error because String is moved during the deconstruction above
+        //println!("{}", person.0);
+        
+        //this line is fine because i32 and f64 are not Droppable types i.e., the are copied when reassigned to a variable
+        println!("{} {}", person.2, person.3);        
+    }</code></pre></pre>
+<h3 id="modifying-a-tuples-contents"><a class="header" href="#modifying-a-tuples-contents">Modifying a tuple's contents</a></h3>
+<p>You can use the <code>tuple.index</code> syntax to modify a tuple's element. For example,</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut person = ("Johnny", "Walker", 42);
+    println!("{:?}", person);
+    
+    person.2 = 88;
+    person.1 = "James";
+    println!("{:?}", person);    
+}</code></pre></pre>
+<h3 id="passing-tuple-to-a-function-or-reassigning-a-tuple"><a class="header" href="#passing-tuple-to-a-function-or-reassigning-a-tuple">Passing tuple to a function or reassigning a tuple</a></h3>
+<ul>
+<li>When tuple contains only types that implement Copy trait, the tuple is copied. You can see this in the example below that
+when we modify the passed in tuple in <code>change_names</code> function, and then call <code>print_names</code> again in the <code>main</code> function, the original
+tuple's contents is not affected.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust  editable">    fn print_numbers(nums:(i32, i32, i32)) {
+        print!("{:?}", nums);
+    }
+    
+    fn change_numbers(mut nums:(i32, i32, i32)) {
+        nums.0 = 6;
+        nums.1 = 5;
+        print_numbers(nums);
+    }
+    
+    fn print_names(names: (&amp;str, &amp;str, &amp;str)) {
+        print!("{:?}", names);
+    }
+    
+    fn change_names(mut names: (&amp;str, &amp;str, &amp;str)) {
+      names.0 = "James";
+      names.1 = "Peter";
+      names.2 = "John";
+      
+      print_names(names);
+    }
+    
+    fn main() {
+        let count_down = (3, 2, 1); 
+        print_numbers(count_down);
+        println!();
+        change_numbers(count_down);
+        println!();
+        print_numbers(count_down);
+        println!();
+        
+        let names = ("Timi", "Tommy", "Jones");
+        print_names(names);
+        println!();
+        change_names(names);
+        println!();
+        print_names(names);
+        
+    }</code></pre></pre>
+<ul>
+<li>When tuple contains only types that implement Drop trait, when you pass that tuple to a function, the contents of the tuple are moved
+and cannot be used thereafter. In the below, the second call to <code>print_names</code> will cause a compile error.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn print_names(names: (String, String, String)) {
+        print!("{:?}", names);
+    }
+    
+    fn main() {
+        let names = (String::from("Timi"), String::from("Tommy"), String::from("Jones"));
+        print_names(names);
+        println!();
+        
+        //The line below will cause a compile error because the contents of the tuple
+        // was moved on the print_names() call above.
+        print_names(names);        
+    }</code></pre></pre>
+<ul>
+<li>When tuple contains types that implement Copy trait as well as types that implement Drop trait, Rust compiler will still throw an error and rightly so i.e., although
+you have a value that implements Copy trait in there, there's no way for Rust to guarantee that you're not going to used the dropped values
+at runtime. Thus, it makes sense to disallow the whole thing altogether.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust editable">    fn print_person(names: (String, String, i32)) {
+        print!("{:?}", names);
+    }
+    
+    fn main() {
+        let person = (String::from("Timi"), String::from("Tommy"), 42);
+        print_person(person);
+        println!();
+        
+        //The line below will cause a compile error because the contents of the tuple
+        // was moved on the print_names() call above.
+        print_person(person);        
+    }</code></pre></pre>
+<h2 id="arrays"><a class="header" href="#arrays">Arrays:</a></h2>
+<ul>
+<li>An array's data is allocated on the stack (see <a href="https://doc.rust-lang.org/book/ch03-02-data-types.html#the-array-type">arrays</a>)</li>
+<li>All elements in an array must be of the same type</li>
+<li>Arrays have a fixed length</li>
+</ul>
+<h3 id="initializing-an-array"><a class="header" href="#initializing-an-array">Initializing an array</a></h3>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+   let fruits = ["apple", "pear", "orange", "blueberry"];
+}</code></pre></pre>
+<p>An array type is indicated using square brackets, the data type of each array element, a semicolon followed by the number of elements in the array.
+In the above snippet the type of the array is implicitly set by rust to <code>[&amp;str; 4]</code> i.e., an array containing four string slices.
+However, we can also explicitly specify the type like so:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() { 
+    let numbers: [i32; 3] = [1, 2, 3];
+    println!("{:?}", numbers);
+}</code></pre></pre>
+<p>It is also possible to initialise all the elements of the array to the same value as shown below.
+In this case, the data type of the array is determined using the value you specified for initialisation.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let fruits = ["apple"; 10]; //Array's type is determined to be [&amp;str; 10]
+    println!("{:?}", fruits);
+    
+    let numbers = [5; 10]; // Array's type is determined to be [i32; 10]
+    println!("{:?}", numbers);    
+}</code></pre></pre>
+<h3 id="passing-array-to-a-function-or-reassigning-an-array"><a class="header" href="#passing-array-to-a-function-or-reassigning-an-array">Passing array to a function or reassigning an array</a></h3>
+<ul>
+<li>When array contains only types that implement Copy trait: when you pass an array containing only types such as integers, floats, booleans, char and your own custom types, that implement the Copy trait to a function, that array is copied.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust  editable">    fn print_numbers(arr:[i32;5]) {
+        for num in arr {
+            print!("{num} ")
+        }
+    }
+    
+    fn change_numbers(mut arr:[i32;5]) {
+        arr[0] = 6;
+        arr[1] = 5;
+        print_numbers(arr);
+    }
+    
+    fn print_names(names: [&amp;str;3]) {
+      for name in names {
+        print!("{name} ");
+      }
+    }
+    
+        
+    fn change_names(mut names:[&amp;str;3]) {
+      names[0] = "James";
+      names[1] = "Peter";
+      names[2] = "John";
+      
+      print_names(names);
+    }
+    
+    fn main() {
+        let count_down = [5, 4, 3, 2, 1]; 
+        print_numbers(count_down);
+        println!();
+        change_numbers(count_down);
+        println!();
+        print_numbers(count_down);
+        println!();
+        
+        let names = ["Timi", "Tommy", "Jones"];
+        print_names(names);
+        println!();
+        change_names(names);
+        println!();
+        print_names(names);
+        
+    }</code></pre></pre>
+<p>In the above, you can see that the <code>count_down</code> array is still the same after the call to <code>mutate_and_print_array</code>  function.</p>
+<ul>
+<li>When array contains only types that implement Drop trait: when you pass an array containing only types that implement the Drop trait such as String or your own custom types, to a function, that array's contents are moved by default.</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust  editable">    fn print_names(names: [String;3]) {
+      for name in names {
+        print!("{name} ");
+      }
+    }
+    
+    fn main() {
+     let names = [String::from("Timi"), String::from("Tommy"), String::from("Jones")];
+        print_names(names); //move occurs here
+        println!();
+        
+        //The snippet below will cause a compile error.
+        print_names(names);
+    }</code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="slice"><a class="header" href="#slice">Slice</a></h1>
+<ul>
+<li>A slice is a reference to a contiguous (i.e. one after the other) sequence of elements in a collection or in a string.</li>
+<li>A slice is a kind of reference. Thus, it doesn't have ownership.</li>
+<li>Unlike the references used when we are borrowing, which is through an existing variable or a temp variable,
+the slice data structure internally stores the starting position and the length of the slice.</li>
+<li>You obtain a slice using <code>&amp;[start_index..end_index]</code> where start index is the index of the first item in the slice
+end_index is one past the last element we want to include in the slice.</li>
+</ul>
+<h2 id="string-slices"><a class="header" href="#string-slices">String slices</a></h2>
+<ul>
+<li>A <em>string slice</em> is an <strong>immutable reference</strong> to a contiguous part of a <code>String</code> (i.e., the <code>String</code> data type).</li>
+<li>The data type for string slice is <code>&amp;str</code></li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let greeting = String::from("How are you?");
+    
+    let part1: &amp;str = &amp;greeting[..3];
+    let part3 = &amp;greeting[8..];
+    let part2 = &amp;greeting[4..7];
+    let whole = &amp;greeting[..];
+    
+    println!("{part1}");
+    println!("{part3}");
+    println!("{part2}");
+    println!("{whole}");
+}</code></pre></pre>
+<p>The diagram below shows a representation of the slices in the snippet above.
+<img src="images/slices.png" alt="slices.png" /></p>
+<ul>
+<li>From the above snippet, each slice contains a pointer to the byte at the specified start position and the length of the slice.</li>
+<li>If you don't specify the first index but specify the end index, the slice begins from position 0 up to the end index minus 1.</li>
+<li>If you specify the start index but not the end index, the slice begins from the start index until the end of the string.</li>
+<li>If you specify the start and end index, the slice goes from the start index to the end index minus 1.</li>
+<li>If you don't specify the start and end indexes, then the slice gives you the entire string.</li>
+</ul>
+<h3 id="string-literals-are-string-slices"><a class="header" href="#string-literals-are-string-slices">String literals are string slices</a></h3>
+<ul>
+<li>In Rust, a string literal is also a <em>string slice</em> and the data type is also <code>&amp;str</code> - just as it is for <em>string slices</em> created from the <code>String</code> data type as shown above.</li>
+<li>String literals are immutable</li>
+<li>String literals are hardcoded directly into the final executable/binary of your program. This is because
+a string literal is known at compile time. For more info, see <a href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#memory-and-allocation">memory allocation</a></li>
+</ul>
+<p>Consider the below,</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let greeting = "hello world";
+}</code></pre></pre>
+<ul>
+<li>The type of the variable <code>greeting</code> above is also <code>&amp;str</code>. That is, it is a slice pointing to specific
+point of the binary/executable. See <a href="https://doc.rust-lang.org/book/ch04-03-slices.html#string-literals-as-slices">string-literals</a> for more info. This is why string literals are immutable.</li>
+</ul>
+<h3 id="string-slices-as-a-function-parameter"><a class="header" href="#string-slices-as-a-function-parameter">String slices as a function parameter</a></h3>
+<ul>
+<li>Given a function definition which has a string slice parameter i.e., <code>&amp;str</code>, you can pass it any of the following:
+<ul>
+<li>A string literal since this is of the same type as a string slice i.e., <code>&amp;str</code></li>
+<li>A slice of a string literal - this type will also be <code>&amp;str</code></li>
+<li>A reference to a <code>String</code> - this makes sense since this is just like passing the full slice of that <code>String</code></li>
+<li>A slice of a <code>String</code> - this type will also be <code>&amp;str</code></li>
+</ul>
+</li>
+</ul>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust">  fn main() {
+    let name = "Jack Jones";
+  
+    print_name(name); // full string literal 
+    print_name(&amp;name[0..4]); // slice of string literal
+  
+    let car = String::from("Mercedes Benz");
+ 
+    print_name(&amp;car); //String reference which is equivalent to a slice of the whole Strong which is &amp;car[..]
+    print_name(&amp;car[..]);// full slice of the String
+    print_name(&amp;car[9..]); // slice of the String
+  }
+  
+  fn print_name(word: &amp;str) {
+    println!("{word}")
+  }</code></pre></pre>
+<h2 id="slices-of-collections"><a class="header" href="#slices-of-collections">Slices of collections</a></h2>
+<ul>
+<li>You can also use slices with arrays and collections</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">  fn main() {
+    let fruits  = ["apple", "pear", "orange", "mango", "pineapple"];
+    
+    println!("{:?}", &amp;fruits[1..3]);
+  }</code></pre></pre>
+<p>In the above, we specify <code>&amp;fruits[1..3]</code> which means we want elements from position 1 in the array up to position 2.
+Thus, similar to string slices we specify a start index and end index and the result is elements from start index up to end index minus 1.</p>
+<h3 id="slices-of-collections-can-be-mutable"><a class="header" href="#slices-of-collections-can-be-mutable">Slices of collections can be mutable</a></h3>
+<p>Unlike a String slice which is immutable, a slice of an array can be mutable if you wish.
+This is because in case of an array you can index into it using the <code>[]</code> and mutate it as you wish.
+Consider the snippet below:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut games = ["basket", "ball"];
+   
+    let games_slice1 = &amp;games[..]; //immutable reference  
+    println!("{:?}", games_slice1);
+    
+    let games_slice2 = &amp; mut games[0..1]; //mutable slice
+    games_slice2[0] = "foot";
+    println!("{:?}", games);
+}</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="understanding-ownership"><a class="header" href="#understanding-ownership">Understanding Ownership</a></h1>
 <h2 id="stack-and-the-heap"><a class="header" href="#stack-and-the-heap">Stack and the heap</a></h2>
 <ul>
@@ -427,6 +988,8 @@ fn main() {
   //Can still use fruit variable here
   println!("Fruit is {}", fruit);
 } </code></pre></pre>
+<p>The diagram below illustrates what happens when you <em>borrow</em> a variable:</p>
+<p><img src="images/borrowing.jpg" alt="borrowing" /></p>
 <p>Similarly, for method calls, you can pass a reference as argument (i.e. borrowed the variable)
 to the function call like so:</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
@@ -443,7 +1006,6 @@ to the function call like so:</p>
 fn say_hello(name: &amp;String) { //name is a reference to a String passed into the function
    println!("Hello {}", name)
 }</code></pre></pre>
-<h2 id="what-actually-happens-when-you-assign"><a class="header" href="#what-actually-happens-when-you-assign">What actually happens when you assign</a></h2>
 <h2 id="a-reference-ie-a-borrowed-variable-is-immutable-by-default"><a class="header" href="#a-reference-ie-a-borrowed-variable-is-immutable-by-default">A reference (i.e. a borrowed variable) is immutable by default</a></h2>
 <p>By default, when you borrow a variable, the reference is immutable. That is, by default, you cannot<br />
 use the reference to change the variable. Example, the below snippet fails:</p>
@@ -575,6 +1137,377 @@ and you want to return it from that function, what you'll want to do instead is 
 </ul>
 </li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="movingborrowingslicing"><a class="header" href="#movingborrowingslicing">Moving/Borrowing/Slicing</a></h1>
+<p>It is important to understand the data types (i.e., notation) that Rust uses to indicate moving, borrowing or slicing.</p>
+<ul>
+<li>When data is copied or moved, the data type of the new owner variable is the same as the original owner.</li>
+<li>When data is borrowed, the data type of the borrower i.e., the variable you're assigning the reference to, is simply preceded by <code>&amp;</code>.</li>
+<li>When data is borrowed for mutation, the data type of the borrower i.e., the variable you're assigning the reference to, is simply preceded by <code>&amp; mut</code>.</li>
+<li>When a String is sliced, the data type of the <code>String</code> slice is <code>&amp;str</code></li>
+<li>When an array is sliced, the data type of the array slice is <code>&amp;[type]</code>.
+E.g. if you obtain a slice of an <code>i32</code> array, the data type will be <code>&amp;[i32]</code>. Notice how the slice's data type doesn't contain the size of the array i.e., it is not <code>&amp;[i32; array_size]</code></li>
+</ul>
+<p>The snippet below shows the data type when a variable is moved, borrowed or sliced.</p>
+<pre><pre class="playground"><code class="language-rust  editable">fn main() {
+
+    //Moving, borrowing or slicing a String
+    let foo_bar: String = String::from("foo bar");
+    let mut foo_bar2: String = foo_bar; //Moved - so data type is the same a foo_bar which is simply String
+    let foo_bar_ref: &amp;String = &amp;foo_bar2; //Immutable reference to a String and this is denoted by &amp;String
+    let foo_bar_slice: &amp;str = &amp;foo_bar2[..3]; //A String slice - this is denoted by &amp;str
+    println!("{} {} {:?}", foo_bar2, foo_bar_ref, foo_bar_slice);
+    
+    //A mutable reference to a String
+    //This is denoted by &amp; mut String
+    let foo_bar_mut_ref: &amp; mut String = &amp; mut foo_bar2; 
+    foo_bar_mut_ref.push_str(" baz");
+    println!("{}", foo_bar_mut_ref);
+
+    //Moving, borrowing or slicing arrays
+    let foo_bar:[String; 2] = [String::from("foo"), String::from("bar")];
+    let mut foo_bar2:[String; 2] = foo_bar; // Moved - so data type is the same a foo_bar which is simply [String; 2]
+    let foo_bar2_ref: &amp;[String; 2] = &amp;foo_bar2; //Immutable reference to an array of String and this is denoted by &amp;[String; 2]
+    
+    //An immutable slice of the array. The data type is simply &amp;[String]. Notice that in this case the array size is not specified.
+    let foo_bar2_slice: &amp;[String] = &amp;foo_bar2[1..]; 
+    println!("{:?} {:?} {:?}", foo_bar2, foo_bar2_ref, foo_bar2_slice);
+    
+    //A mutable slice of the array. 
+    //The data type is simply &amp; mut [String]. Notice that in this case the array size is not specified.
+    let foo_bar2_slice: &amp; mut [String] = &amp; mut foo_bar2[1..]; 
+    foo_bar2_slice[0] = String::from("barbaz"); 
+    println!("{:?}", foo_bar2_slice);
+    
+    //A mutable reference to the array
+    let foo_bar2_mut_ref: &amp; mut [String; 2] = &amp; mut foo_bar2;
+    foo_bar2_mut_ref[1].push_str("baz");
+    foo_bar2_mut_ref[0] = String::from("bay");
+    println!("{:?}", foo_bar2_mut_ref);
+
+}</code></pre></pre>
+<p>Although we explicitly set the data types in the snippet above, they can also be derived implicitly as shown in screen shot below
+<img src="images/moving-borrowing-slicing.png" alt="moving-borrowing-slicing.png" /></p>
+<p>Note: What we've demonstrated with arrays in the example above also applies to collections like vectors, sets which we'll see later on.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="structs"><a class="header" href="#structs">Structs</a></h1>
+<ul>
+<li>A struct or structure lets you create a group of related fields</li>
+<li>A struct is like the set of fields in a class (i.e., in Object-Oriented Programming)</li>
+<li>A struct is similar to tuples, but with structs the fields are given names and structs can have functions associated with them</li>
+</ul>
+<h2 id="declaring-a-struct"><a class="header" href="#declaring-a-struct">Declaring a struct</a></h2>
+<ul>
+<li>You declare a struct with the <code>struct</code> keyword. For example, consider the Employee struct below:</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">struct Employee {
+    id: i32, 
+    first_name: String,
+    middle_name: String,
+    last_name: String,
+}
+<span class="boring">fn main() {}</span></code></pre></pre>
+<h2 id="instantiating-a-struct"><a class="header" href="#instantiating-a-struct">Instantiating a struct</a></h2>
+<p>You instantiate a struct as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>fn main() {
+    let emp = Employee {
+        id : 11,
+        first_name : String::from("Olu"),
+        middle_name : String::from("Timi"),
+        last_name : String::from("Toyin")
+    };
+} </code></pre></pre>
+<h2 id="accessing-a-structs-fields"><a class="header" href="#accessing-a-structs-fields">Accessing a struct's fields</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>fn main() {
+    let emp = Employee {
+        id : 11,
+        first_name : String::from("Olu"),
+        middle_name : String::from("Timi"),
+        last_name : String::from("Toyin")
+    };
+    
+    println!("{}:{} {} {}", emp.id, emp.first_name, emp.middle_name, emp.last_name);
+} </code></pre></pre>
+<h2 id="changing-the-value-assigned-to-a-structs-field"><a class="header" href="#changing-the-value-assigned-to-a-structs-field">Changing the value assigned to a struct's field</a></h2>
+<ul>
+<li>To update the value assigned to a struct's field, you must make it mutable using the <code>mut</code> keyword:</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>
+fn main() {
+    let mut emp = Employee {
+        id : 11,
+        first_name : String::from("Olu"),
+        middle_name : String::from("Timi"),
+        last_name : String::from("Toyin")
+    };
+    
+    println!("{}:{} {} {}", emp.id, emp.first_name, emp.middle_name, emp.last_name);
+    emp.middle_name = String::from("Tayo");
+    println!("{}:{} {} {}", emp.id, emp.first_name, emp.middle_name, emp.last_name);    
+} </code></pre></pre>
+<h2 id="printing-a-struct"><a class="header" href="#printing-a-struct">Printing a struct</a></h2>
+<p>If you ordinarily pass an instance of your struct to <code>println!</code>, Rust will complain that your struct
+doesn't implement<code>std::fmt::Display</code> and it suggests to you to use <code>{:?}</code> (or <code>{:#?}</code> for pretty-print) instead
+in the placeholder for <code>println</code>. Run the below snippet to see.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>
+fn main() {
+    let emp = Employee {
+        id : 11,
+        first_name : String::from("Olu"),
+        middle_name : String::from("Timi"),
+        last_name : String::from("Toyin")
+    };
+    
+    println!("{}", emp);
+}</code></pre></pre>
+<p>Let's update the <code>println!("{}", emp);</code> as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>
+fn main() {
+    let emp = Employee {
+        id : 11,
+        first_name : String::from("Olu"),
+        middle_name : String::from("Timi"),
+        last_name : String::from("Toyin")
+    };
+    
+    println!("{:?}", emp);
+    println!("{:#?}", emp);
+}</code></pre></pre>
+<p>Now it complains that your struct doesn't implement <code>Debug</code>.
+We can fix this by adding the attribute: <code>#[derive(Debug)]</code> to the top of your struct definition like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>
+fn main() {
+    let emp = Employee {
+        id : 11,
+        first_name : String::from("Olu"),
+        middle_name : String::from("Timi"),
+        last_name : String::from("Toyin")
+    };
+    
+    println!("{:?}", emp);
+    println!("{:#?}", emp);
+}</code></pre></pre>
+<h2 id="returning-a-struct-from-a-function"><a class="header" href="#returning-a-struct-from-a-function">Returning a struct from a function</a></h2>
+<p>You can return a struct from a function:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>
+fn main() {
+  let emp = an_employee(String::from("Olu"), String::from("Time"), String::from("Jacobs"));
+  println!("{:?}", emp);
+}
+
+fn an_employee(first_name: String, middle_name: String, last_name: String) -&gt; Employee {
+    Employee {
+        id : 12,
+        first_name : first_name,
+        middle_name : middle_name,
+        last_name : last_name
+    }
+}</code></pre></pre>
+<h3 id="use-the-field-init-shorthand-syntax"><a class="header" href="#use-the-field-init-shorthand-syntax">Use the Field init shorthand syntax</a></h3>
+<p>In the previous snippet, the parameters of function <code>an_employee</code> has the same name as the struct's fields. In such a case, we
+can shorten the <code>field_name: parameter_name</code> to simply <code>parameter_name</code> like so:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>
+fn main() {
+  let emp = an_employee(String::from("Olu"), String::from("Time"), String::from("Jacobs"));
+  println!("{:?}", emp);
+}
+
+fn an_employee(first_name: String, middle_name: String, last_name: String) -&gt; Employee {
+    Employee {
+        id : 12,
+        first_name,
+        middle_name,
+        last_name
+    }
+}</code></pre></pre>
+<h2 id="updating-a-struct-using-the-struct-update-syntax"><a class="header" href="#updating-a-struct-using-the-struct-update-syntax">Updating a struct using the struct update syntax</a></h2>
+<p>The struct update syntax allows you to create a new struct from an existing struct's fields and only change the values you want to change.
+In the snippet below, we create <code>emp1</code> and use it to create <code>emp2</code> only changing the value of middle_name from <code>emp1</code>.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+</span><span class="boring">struct Employee {
+</span><span class="boring">   id: i32, 
+</span><span class="boring">   first_name: String,
+</span><span class="boring">   middle_name: String,
+</span><span class="boring">   last_name: String,
+</span><span class="boring">}
+</span>
+fn main() {
+  let emp1 = an_employee(String::from("Olu"), String::from("Timi"), String::from("Jacobs"));
+  println!("{:?}", emp1);
+  
+  let emp2 = Employee {
+        middle_name : String::from("John"),
+        ..emp1
+  };
+  println!("{:?}", emp2);
+}
+
+fn an_employee(first_name: String, middle_name: String, last_name: String) -&gt; Employee {
+    Employee {
+        id : 12,
+        first_name : first_name,
+        middle_name : middle_name,
+        last_name : last_name
+    }
+}</code></pre></pre>
+<h2 id="tuple-structs"><a class="header" href="#tuple-structs">Tuple structs</a></h2>
+<p>They are structs which don't have names associated with their fields; rather they just have the types.
+Tuple structs are useful when you want to give the whole tuple a name and make the tuple a different type from other tuples (see <a href="https://doc.rust-lang.org/book/ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types">tuple structs</a> )
+For example,</p>
+<pre><pre class="playground"><code class="language-rust">  #[derive(Debug)]
+  struct Point(i32, i32);
+  
+  fn main() {
+    let point1 = Point(3, 10);
+    
+    println!("{:?}", point1);
+  }</code></pre></pre>
+<h3 id="destructure-tuple-structs"><a class="header" href="#destructure-tuple-structs">Destructure tuple structs</a></h3>
+<p>You can also destructure tuple structs in a similar fashion to the way you do with tuples but in the case of tuple structs you must
+also specify the name of the struct. See example below showing tuple structs and an ordinary tuple.</p>
+<pre><pre class="playground"><code class="language-rust">  #[derive(Debug)]
+  struct Point(i32, i32);
+  
+  fn main() {
+    let point1 = Point(3, 10); //tuple struct
+    let point2 = (4, 15); // ordinary tuple
+ 
+    println!("Point 1: {:?}", point1);
+    println!("Point 2: {:?}", point2);
+    
+    let Point(a, b) = point1; //destructuring mentions the name of the struct
+    let (x, y) = point2; // destructuring just uses the normal tuple syntax i.e., (x, y)
+    
+    println!("{}, {}",a, b);
+    println!("{}, {}",x, y);
+  }</code></pre></pre>
+<h2 id="unit-structs"><a class="header" href="#unit-structs">Unit structs</a></h2>
+<p>A unit struct is a struct which has no data in it. It is simply defined as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Foo;
+<span class="boring">}</span></code></pre></pre>
+<p>Unit structs can be useful when you want to implement a trait on some type but don’t have any data that you want to store in the type itself.
+(source:<a href="https://doc.rust-lang.org/book/ch05-01-defining-structs.html#unit-like-structs-without-any-fields">unit structs</a> )</p>
+<h2 id="ownership-of-struct-data"><a class="header" href="#ownership-of-struct-data">Ownership of Struct data</a></h2>
+<p>All the examples we have seen so far have used types owned by the struct such as <code>String</code> instead of <code>&amp;str</code> and types which implement the <code>Copy</code> trait.
+t’s also possible for structs to store references to data owned by something else, but to do so requires the use of lifetimes (source: <a href="https://doc.rust-lang.org/book/ch05-01-defining-structs.html#ownership-of-struct-data">ownership of struct data</a>).
+Lifetimes ensure that the data referenced by a struct is valid for as long as the struct is. We'll discuss this more later.</p>
+<h2 id="associated-functions-in-structs"><a class="header" href="#associated-functions-in-structs">Associated functions in structs</a></h2>
+<p>It is possible to create functions within the context of a struct. Thus, such functions are called associate functions because they are defined within the struct.
+To define an associated function you do so in that's called an <code>impl</code> definition for the struct. For example, consider the following <code>Time</code> struct
+and an associated function called <code>new</code> for instantiating an instance of the struct</p>
+<pre><pre class="playground"><code class="language-rust editable">#[derive(Debug)]
+struct Time {
+   hour: u8,
+   minute: u8,
+   second: u8
+}
+
+impl Time {
+   fn new(hour: u8, minute: u8, second: u8) -&gt; Self {
+      Self {
+         hour, //showcasing field init syntax
+         minute: minute,
+         second: second
+      }
+   }
+}
+
+fn main() {
+   let play_time = Time::new(12, 30, 0);
+   println!("{:?} is play time.", play_time);
+}
+</code></pre></pre>
+<p>In the above, note that in the function body we are instantiating a <code>Self</code> and that the return type of the <code>new</code> function is also a Self.
+Self is a special keyword which is just an alias for the struct in which this associated function resides in, i.e., <code>Time</code> struct in this case.
+Thus, we could have just specified <code>Time</code> everywhere we have used <code>Self</code>.</p>
+<h3 id="methods-in-structs"><a class="header" href="#methods-in-structs">Methods in structs</a></h3>
+<pre><pre class="playground"><code class="language-rust">mod data {
+
+    pub struct AgeHeight { 
+        age: i32, 
+        height: f64
+    }
+
+
+    impl AgeHeight {
+        pub fn new(age:i32, height: f64) -&gt; Self {
+            AgeHeight { age: age, height:height }
+        }
+
+        pub fn get_age(&amp;self) -&gt; i32 {
+            self.age
+        }
+
+        pub fn get_height(&amp;self) -&gt; f64 {
+            self.height
+        }
+    }
+
+}
+
+fn main() {
+
+    let age_height1 = data::AgeHeight::new(42, 1.85);
+    let age_height2 = data::AgeHeight::new(41, 1.70);
+
+    println!("Age {} height {}", age_height1.get_age(), age_height1.get_height());
+    println!("Age {} height {}", age_height2.get_age(), age_height2.get_height());
+ }</code></pre></pre>
+<h2 id="passing-a-struct-to-a-function"><a class="header" href="#passing-a-struct-to-a-function">Passing a struct to a function</a></h2>
+<h3 id="when-the-struct-contains-only-types-that-implement-copy-trait"><a class="header" href="#when-the-struct-contains-only-types-that-implement-copy-trait">When the struct contains only types that implement Copy trait</a></h3>
+<h3 id="when-the-struct-contains-only-types-that-implement-drop-trait"><a class="header" href="#when-the-struct-contains-only-types-that-implement-drop-trait">When the struct contains only types that implement Drop trait</a></h3>
+<h3 id="when-the-struct-contains-types-that-implement-copy-as-well-as-those-that-implement-drop"><a class="header" href="#when-the-struct-contains-types-that-implement-copy-as-well-as-those-that-implement-drop">When the struct contains types that implement Copy as well as those that implement Drop</a></h3>
 
                     </main>
 
@@ -593,22 +1526,6 @@ and you want to return it from that function, what you'll want to do instead is 
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 
